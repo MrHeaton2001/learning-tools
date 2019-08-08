@@ -9,6 +9,8 @@
 * Using default $HOME/.ssh/config file
 * Using specified ssh config file
 * Using managing remote host resolution on the Bastion Host
+* RDP to remote Windows server
+* WinRM to remote Windows server through a SSH tunnel/SOCKS5 proxy
 
 # External References
 ## Vagrant
