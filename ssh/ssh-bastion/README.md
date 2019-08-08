@@ -50,6 +50,8 @@ https://www.vagrantup.com/docs/
 
 1. Use `vagrant box add {{ BOX_NAME }}` to add a CentOS 7 base box to be used by this `Vagrantfile`. (Example: `vagrant box add centos/7` and choose `3` for the VirtualBox flavor)
 
+1. Use `vagrant box add {{ BOX_NAME }} --box-version {{ BOX_VERSION }}` to add a CentOS 7 base box to be used by this `Vagrantfile`. (Example: `vagrant box add gusztavvargadr/windows-server --box-version 1809.0.1907-standard` and choose `2` for the VirtualBox flavor)
+
 1. Edit the `machines.yml` file to ensure the box you downloaded in step 1 is specified on the "box:" line of this file for each VM. (By default, there are four VMs, so make sure to specify the correct box name for all four VMs.)
 
 1. Run `vagrant up`, and when the VMs are finished provisioning run `vagrant ssh-config bastion`.
