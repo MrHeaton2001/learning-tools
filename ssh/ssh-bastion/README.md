@@ -49,7 +49,7 @@ https://www.vagrantup.com/docs/
 
 1. Edit the `machines.yml` file to ensure the box you downloaded in step 1 is specified on the "box:" line of this file for each VM. (By default, there are four VMs, so make sure to specify the correct box name for all four VMs.)
 
-1. Run `vagrant up`, and when the VMs are finished provisioning run `vagrant ssh-config bastion`. Make note of the IP address provided for this VM; you'll need it in the next step.
+1. Run `vagrant up`, and when the VMs are finished provisioning run `vagrant ssh-config bastion`.
 
 1. Run `vagrant ssh client` to access the SSH client VM.
 
