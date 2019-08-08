@@ -1,8 +1,8 @@
-# SSH Bastion Hosts
+# SSH Bastion Host Lab
 
-These files were created to allow users to use Vagrant ([http://www.vagrantup.com](http://www.vagrantup.com)) to quickly and easily provision an environment for learning and working with SSH bastion hosts and proxy commands. This environment was created and tested using VirtualBox, VMware Fusion, Vagrant,the Vagrant VMware plugin.
+This solution allows users to use Vagrant ([http://www.vagrantup.com](http://www.vagrantup.com)) to quickly and easily provision an environment for learning and working with SSH bastion hosts and proxy commands. This environment was created and tested using VirtualBox, VMware Fusion, and Vagrant.
 
-## Contents
+## Assets
 
 * **bastion\_rsa** and **bastion\_rsa.pub**: Private/public key pair for accessing the SSH bastion host. The password for this key pair is `password` (all lowercase). These files are automatically installed by Vagrant into the correct VMs.
 
@@ -23,6 +23,9 @@ _NOTE: `/etc/hosts` does not need to be manipulated. It is a way but it may not 
 * **Vagrantfile**: This file is used by Vagrant to spin up the virtual machines. This file is fairly extensively commented to help explain what's happening. You should be able to use this file unchanged; all the VM configuration options are stored outside this file.
 
 ## Getting Started
+The goal of this lab is to provision a multi-machine Vagrant environment in which a client and bastion host reside in a network (mock public network) and two remote servers reside in a private network. The client must proxy through the bastion host to access the remote servers in the private network. The Vagrant managed virtual data center to be provisioned is described in the following diagram.
+
+![ssh-bastion-diagram.png](ssh-bastion-diagram.png)
 
 These instructions assume you've already installed VirtualBox and Vagrant. Please refer to the documentation for those products for more information on installation or configuration.
 
@@ -59,7 +62,7 @@ https://www.vagrantup.com/docs/
 
 _NOTE: The passphrase for `bastion_rsa` is "password"; for `remote_rsa` the passphrase is "secure"._
 
-_TIP: You can start the `ssh agent` and store your passphrase but there are security ramifications to consider._
+_TIP: You can start `ssh agent` and store your private keys and passphrases but there are security ramifications to consider._
 
 
 Enjoy!
