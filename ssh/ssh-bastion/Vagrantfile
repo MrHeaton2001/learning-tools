@@ -34,9 +34,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end #if machine['sync_disabled']
 
       # Assign additional private network, if specified in machines.yml
-      if machine['ip_addr'] != nil
-        srv.vm.network 'private_network', ip: machine['ip_addr']
-      end # if machine['ip_addr']
+      if machine['private_ip_addr'] != nil
+        srv.vm.network "private_network", ip: machine['private_ip_addr'], forward_mode: "none", virtualbox__intnet: "myprivatevnet"
+      end # if machine['private_ip_addr']
+
+      # Assign additional mock public network(actually just another private network), if specified in machines.yml
+      if machine['mock_public_ip_addr'] != nil
+        srv.vm.network "private_network", ip: machine['mock_public_ip_addr'], forward_mode: "none"
+      end # if machine['mock_public_ip_addr']
 
       # Configure CPU & RAM per settings in machines.yml (Fusion)
       srv.vm.provider 'vmware_fusion' do |vmw|

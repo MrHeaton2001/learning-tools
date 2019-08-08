@@ -1,24 +1,33 @@
 ---
 - name: "client"
-  vmw_box: "bento/ubuntu-14.04"
-  vb_box: "ubuntu/trusty64"
+  vmw_box: "centos/7"
+  vb_box: "centos/7"
+  #box_url: 
   ram: "512"
   vcpu: "1"
+  mock_public_ip_addr: "192.168.30.30"
+
+# https://app.vagrantup.com/centos/boxes/7  
 - name: "bastion"
-  vmw_box: "bento/ubuntu-14.04"
-  vb_box: "ubuntu/trusty64"
+  vmw_box: "centos/7"
+  vb_box: "centos/7"
   ram: "512"
   vcpu: "1"
-  ip_addr: "10.100.60.1"
+  mock_public_ip_addr: "192.168.30.100"
+  private_ip_addr: "172.20.30.100"
+
+# https://app.vagrantup.com/centos/boxes/7    
 - name: "remote1"
-  vmw_box: "bento/ubuntu-14.04"
-  vb_box: "ubuntu/trusty64"
+  vmw_box: "centos/7"
+  vb_box: "centos/7"
   ram: "512"
   vcpu: "1"
-  ip_addr: "10.100.60.2"
+  private_ip_addr: "172.20.30.11"
+
+# https://app.vagrantup.com/centos/boxes/7    
 - name: "remote2"
-  vmw_box: "bento/ubuntu-14.04"
-  vb_box: "ubuntu/trusty64"
+  vmw_box: "centos/7"
+  vb_box: "centos/7"
   ram: "512"
   vcpu: "1"
-  ip_addr: "10.100.60.3"
+  private_ip_addr: "172.20.30.12"
