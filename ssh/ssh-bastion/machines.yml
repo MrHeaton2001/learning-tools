@@ -5,7 +5,7 @@
   #box_url: 
   ram: "512"
   vcpu: "1"
-  mock_public_ip_addr: "192.168.30.30"
+  mock_public_ip_addr: "192.168.60.30"
 
 # https://app.vagrantup.com/centos/boxes/7  
 - name: "bastion"
@@ -13,8 +13,8 @@
   vb_box: "centos/7"
   ram: "512"
   vcpu: "1"
-  mock_public_ip_addr: "192.168.30.100"
-  private_ip_addr: "172.20.30.100"
+  mock_public_ip_addr: "192.168.60.100"
+  private_ip_addr: "10.100.60.100"
 
 # https://app.vagrantup.com/centos/boxes/7    
 - name: "remote1"
@@ -22,7 +22,7 @@
   vb_box: "centos/7"
   ram: "512"
   vcpu: "1"
-  private_ip_addr: "172.20.30.11"
+  private_ip_addr: "10.100.60.11"
 
 # https://app.vagrantup.com/centos/boxes/7    
 - name: "remote2"
@@ -30,4 +30,4 @@
   vb_box: "centos/7"
   ram: "512"
   vcpu: "1"
-  private_ip_addr: "172.20.30.12"
+  private_ip_addr: "10.100.60.12"
