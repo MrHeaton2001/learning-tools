@@ -12,3 +12,11 @@ Host remote2
   Hostname 10.100.60.12
   IdentityFile ~/.ssh/remote_rsa
   ProxyCommand ssh bastion -W %h:%p
+
+# Windows 2019 server with OpenSSH configured
+Host remote3
+  Hostname 10.100.60.13
+  IdentityFile ~/.ssh/vagrant_insecure_rsa
+  ProxyCommand ssh bastion -W %h:%p
+
+

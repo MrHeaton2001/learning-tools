@@ -70,6 +70,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           destination: '/home/vagrant/.ssh/remote_rsa'
         srv.vm.provision 'file', source: 'remote_rsa.pub', 
           destination: '/home/vagrant/.ssh/remote_rsa.pub'
+        srv.vm.provision 'file', source: 'vagrant_insecure_rsa', 
+          destination: '/home/vagrant/.ssh/vagrant_insecure_rsa'
+        srv.vm.provision 'file', source: 'vagrant_insecure_rsa.pub', 
+          destination: '/home/vagrant/.ssh/vagrant_insecure_rsa.pub'
         srv.vm.provision 'file', source: 'client-ssh-config',
           destination: '/home/vagrant/.ssh/config'
       end # if 'client'
