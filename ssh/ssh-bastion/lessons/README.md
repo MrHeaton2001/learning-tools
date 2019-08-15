@@ -9,6 +9,7 @@
 * Using default $HOME/.ssh/config file
 * Using specified ssh config file
 * Using managing remote host resolution on the Bastion Host
+* [Add new client to public network](add-new-client-to-public-network.md)
 * [SSH Essentials](ssh-essentials.md)
 * The risk of unmanaged keys
 * RDP to remote Windows server
