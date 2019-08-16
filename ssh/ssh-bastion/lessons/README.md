@@ -12,7 +12,7 @@
 * [Add new client to public network](add-new-client-to-public-network.md)
 * [SSH Essentials](ssh-essentials.md)
 * The risk of unmanaged keys
-* RDP to remote Windows server
+* [RDP to remote Windows server](rdp-to-remote-windows-node.md)
 * WinRM to remote Windows server through a SSH tunnel/SOCKS5 proxy
 * Remote PowerShell via WinRM
 * SSH to remote Windows server
