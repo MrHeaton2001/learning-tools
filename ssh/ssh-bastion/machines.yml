@@ -40,15 +40,23 @@
   vcpu: "1"
   private_ip_addr: "10.100.60.12"
 
-# # https://app.vagrantup.com/gusztavvargadr/boxes/windows-server/versions/1809.0.1907-standard
-# # NOTE: only available for VirtualBox and HyperV
-# - name: "remote3"
-#   vb_box: "gusztavvargadr/windows-server"
-#   box_version: "1809.0.1907-standard"
-#   ram: "1024"
-#   vcpu: "1"
-#   private_ip_addr: "10.100.60.13"
+# https://app.vagrantup.com/gusztavvargadr/boxes/windows-server/versions/1809.0.1907-standard
+# NOTE: only available for VirtualBox and HyperV
+- name: "remote3"
+  vb_box: "gusztavvargadr/windows-server"
+  box_version: "1809.0.1907-standard"
+  ram: "1024"
+  vcpu: "1"
+  private_ip_addr: "10.100.60.13"
 
+# https://app.vagrantup.com/gusztavvargadr/boxes/windows-server/versions/1809.0.1907-standard-core
+# NOTE: only available for VirtualBox and HyperV
+- name: "remote5"
+  vb_box: "gusztavvargadr/windows-server"
+  box_version: "1809.0.1907-standard-core"
+  ram: "1024"
+  vcpu: "1"
+  private_ip_addr: "10.100.60.15"
 
 # https://app.vagrantup.com/peru/boxes/windows-server-2016-standard-x64-eval
 - name: "remote4"

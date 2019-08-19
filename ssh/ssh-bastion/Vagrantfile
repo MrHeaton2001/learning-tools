@@ -57,6 +57,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.memory = machine['ram']
         vb.cpus = machine['vcpu']
         override.vm.box = machine['vb_box']
+        if machine['box_version'] != nil
+          override.vm.box_version = machine['box_version']
+        end #if machine['box_version']
       end # srv.vm.provider virtualbox
 
       # Provision key pairs according to VM name
