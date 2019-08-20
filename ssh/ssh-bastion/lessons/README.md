@@ -13,8 +13,8 @@
 * [SSH Essentials](ssh-essentials.md)
 * The risk of unmanaged keys
 * [RDP to remote Windows server](rdp-to-remote-windows-node.md)
+* [Remote PowerShell via WinRM](remote-powershell-via-winrm.md)
 * WinRM to remote Windows server through a SSH tunnel/SOCKS5 proxy
-* Remote PowerShell via WinRM
 * SSH to remote Windows server
 * Remote PowerShell via SSH
 

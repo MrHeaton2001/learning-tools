@@ -84,3 +84,5 @@ The script is named `rdp-tunnel.sh`. It is located in `ssh/ssh-bastion`.
 1. In `terminal`, execute `ps aux |grep "ssh -M"`. Expect to not find the ssh process as it was destroyed during the Post Command execution.
 
 ## External References
+
+* [Remmina RDP SSH tunnel with Pre and Post scripts](https://kgibran.wordpress.com/2019/03/13/remmina-rdp-ssh-tunnel-with-pre-and-post-scripts/)

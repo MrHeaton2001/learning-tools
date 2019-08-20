@@ -24,7 +24,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       # Don't check for box updates
       srv.vm.box_check_update = false
       srv.vm.hostname = machine['name']
-      srv.vm.box = machine['vmw_box']
+      srv.vm.box = machine['vb_box']
 
       # Configure default synced folder (disable by default)
       if machine['sync_disabled'] != nil
@@ -43,28 +43,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         srv.vm.network "private_network", ip: machine['mock_public_ip_addr'], forward_mode: "none"
       end # if machine['mock_public_ip_addr']
 
-      # Configure CPU & RAM per settings in machines.yml (Fusion)
-      srv.vm.provider 'vmware_fusion' do |vmw|
-        vmw.vmx['memsize'] = machine['ram']
-        vmw.vmx['numvcpus'] = machine['vcpu']
-        if machine['nested'] == true
-          vmw.vmx['vhv.enable'] = 'TRUE'
-        end #if machine['nested']
-      end # srv.vm.provider vmware_fusion
-
       # Configure CPU & RAM per settings in machines.yml (VirtualBox)
       srv.vm.provider 'virtualbox' do |vb, override|
         vb.memory = machine['ram']
         vb.cpus = machine['vcpu']
-        override.vm.box = machine['vb_box']
+        #override.vm.box = machine['vb_box']
         if machine['box_version'] != nil
           override.vm.box_version = machine['box_version']
         end #if machine['box_version']
+        vb.gui = machine['gui_mode']
       end # srv.vm.provider virtualbox
 
       # Provision key pairs according to VM name
-      # If 'client' VM, copy in all keys
-      if machine['name'] == 'client'
+      # If 'client-node' VM, copy in all keys
+      if machine['role'] == 'client-node'
         srv.vm.provision 'file', source: 'bastion_rsa', 
           destination: '/home/vagrant/.ssh/bastion_rsa'
         srv.vm.provision 'file', source: 'bastion_rsa.pub', 
@@ -79,10 +71,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           destination: '/home/vagrant/.ssh/vagrant_insecure_rsa.pub'
         srv.vm.provision 'file', source: 'client-ssh-config',
           destination: '/home/vagrant/.ssh/config'
-      end # if 'client'
+      end # if 'client-node'
 
-      # If 'bastion' VM, echo bastion_rsa.pub to authorized_keys
-      if machine['name'] == 'bastion'
+      # If 'bastion-node' VM, echo bastion_rsa.pub to authorized_keys
+      if machine['role'] == 'bastion-node'
         srv.vm.provision 'file', source: 'bastion_rsa.pub', 
           destination: '/home/vagrant/bastion_rsa.pub'
         srv.vm.provision 'shell', 
@@ -93,34 +85,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         srv.vm.provision 'shell',
           inline: 'cat /home/vagrant/bastion-hosts >> /etc/hosts', privileged: 'true'
         srv.vm.provision 'shell', inline: 'rm /home/vagrant/bastion-hosts'
-      end # if 'bastion'
+      end # if 'bastion-node'
 
-      # If 'remote1' VM, echo remote_rsa.pub to authorized_keys
-      if machine['name'] == 'remote1'
+      # If 'remote-node' VM, echo remote_rsa.pub to authorized_keys
+      if machine['role'] == 'remote-node'
         srv.vm.provision 'file', source: 'remote_rsa.pub', 
           destination: '/home/vagrant/remote_rsa.pub'
         srv.vm.provision 'shell', 
           inline: 'cat /home/vagrant/remote_rsa.pub >> /home/vagrant/.ssh/authorized_keys'
         srv.vm.provision 'shell', inline: 'rm /home/vagrant/remote_rsa.pub'
-      end # if 'remote1'
-
-      # If 'remote2' VM, echo remote_rsa.pub to authorized_keys
-      if machine['name'] == 'remote2'
-        srv.vm.provision 'file', source: 'remote_rsa.pub', 
-          destination: '/home/vagrant/remote_rsa.pub'
-        srv.vm.provision 'shell', 
-          inline: 'cat /home/vagrant/remote_rsa.pub >> /home/vagrant/.ssh/authorized_keys'
-        srv.vm.provision 'shell', inline: 'rm /home/vagrant/remote_rsa.pub'
-      end # if 'remote2'
-
-      # If 'remote3' VM, echo remote_rsa.pub to authorized_keys
-      #if machine['name'] == 'remote3'
-      #  srv.vm.provision 'file', source: 'remote_rsa.pub', 
-      #    destination: '/home/vagrant/remote_rsa.pub'
-      #  srv.vm.provision 'shell', 
-      #    inline: 'cat /home/vagrant/remote_rsa.pub >> /home/vagrant/.ssh/authorized_keys'
-      #  srv.vm.provision 'shell', inline: 'rm /home/vagrant/remote_rsa.pub'
-      #end # if 'remote3'
+      end # if 'remote-node'
     end # config.vm.define
   end # machines.each
 end # Vagrant.configure

@@ -65,8 +65,6 @@ Our goal is to configure SSH communication between the new client, the bastion h
 
 1. On your workstation, locate the `client-ssh-config` file and copy it to the `dev-client` box as `ssh.conf`. *NOTE: I use scp to copy files from my host to vagrant boxes. For example: `scp -i vagrant_insecure_rsa -P 2222 client-ssh-config vagrant@localhost:~/.ssh/ssh.conf`.*
 
-1. On the `dev-client` box, change security on the `ssh.conf` file. In terminal, execute `chmod 400 ~/.ssh/ssh.conf`.
-
 1. On the `dev-client` box, modify the `ssh.conf` file contents as below:
 ```
 Host bastion
@@ -90,6 +88,7 @@ Host remote3
   IdentityFile ~/.ssh/vagrant_insecure_rsa
   ProxyCommand ssh bastion -W %h:%p -F ssh.conf
 ```
+1. On the `dev-client` box, change security on the `ssh.conf` file. In terminal, execute `chmod 400 ~/.ssh/ssh.conf`.
 
 1. Verify you can establish an SSH session from `dev-client` to `bastion` using the `ssh.conf`. On your workstation, `vagrant up bastion` (If the bastion host is not already running; if it's running skip executing this command). On the `dev-test` box, in terminal, execute `ssh -F ~/.ssh/ssh.conf bastion`. *NOTE: An SSH session should be established successfully. Although the ssh.conf file or using the default ~/.ssh/conf file is unnecessary to successfully establish an SSH session with a remote server if does make it easier especially when jumping through a bastion host to a private remote server.*
 
