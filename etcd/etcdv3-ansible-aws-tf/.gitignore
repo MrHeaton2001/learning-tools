@@ -1,5 +1,0 @@
-*.retry
-*.tfstate
-*.tfstate.backup
-*.tfvars
-ec2-tmp

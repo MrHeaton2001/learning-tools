@@ -320,8 +320,6 @@ Ethernet adapter Ethernet 2:
 
 10. Repeat steps 6 through 9 for `remote6`.
 
-*NOTE: We will not cover how to 
-
 ## External References
 
 ### Windows 2019 Server

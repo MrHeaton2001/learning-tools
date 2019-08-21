@@ -1,7 +1,0 @@
----
-- name: "photon-01"
-  box:
-    vmw: "vmware/photon"
-    vb: "vmware/photon"
-  ram: "512"
-  vcpu: "1"

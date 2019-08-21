@@ -1,8 +1,0 @@
----
-- name: "lxc-01"
-  box:
-    vmw: "bento/ubuntu-14.04"
-    vb: "ubuntu/trusty64"
-  ram: "512"
-  vcpu: "1"
-  ip_addr: "192.168.100.100"

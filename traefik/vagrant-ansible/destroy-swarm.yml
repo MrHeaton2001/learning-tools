@@ -1,8 +1,0 @@
----
-- hosts: "all"
-  become: "yes"
-  remote_user: "vagrant"
-
-  tasks:
-  - name: "Leave Swarm cluster"
-    command: "docker swarm leave --force"
