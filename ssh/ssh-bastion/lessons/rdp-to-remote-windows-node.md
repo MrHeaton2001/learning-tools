@@ -40,7 +40,7 @@ We will start the `dev-client` (Fedora development workstation), `bastion` (Cent
 
 1. Verify that you have RDP'd to the correct server. In the RDP window, launch PowerShell.
 
-1. In PowerShell, execute `ifconfig`. You expect to see `10.100.60.14` as one of the addresses. Execute `hostname`. You expect to see `remote4`. Execute `whoami`. You expect to see `remote4\vagrant`.
+1. In PowerShell, execute `ipconfig`. You expect to see `10.100.60.14` as one of the addresses. Execute `hostname`. You expect to see `remote4`. Execute `whoami`. You expect to see `remote4\vagrant`.
 
 ### Stop SSH Tunnel
 
