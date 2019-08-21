@@ -6,7 +6,7 @@
   gui_mode: false
   ram: "512"
   vcpu: "1"
-  mock_public_ip_addr: "192.168.60.30"
+  local_net_ip_addr: "192.168.60.30"
 
 - name: "dev-client"
   role: "client-node"
@@ -15,7 +15,7 @@
   gui_mode: true
   ram: "2048"
   vcpu: "2"
-  mock_public_ip_addr: "192.168.60.31"
+  local_net_ip_addr: "192.168.60.31"
 
 # https://app.vagrantup.com/centos/boxes/7  
 - name: "bastion"
@@ -24,8 +24,8 @@
   gui_mode: false
   ram: "512"
   vcpu: "1"
-  mock_public_ip_addr: "192.168.60.100"
-  private_ip_addr: "10.100.60.100"
+  local_net_ip_addr: "192.168.60.100"
+  private_net_ip_addr: "10.100.60.100"
 
 # https://app.vagrantup.com/centos/boxes/7    
 - name: "remote1"
@@ -34,7 +34,7 @@
   gui_mode: false
   ram: "512"
   vcpu: "1"
-  private_ip_addr: "10.100.60.11"
+  private_net_ip_addr: "10.100.60.11"
 
 # https://app.vagrantup.com/centos/boxes/7    
 - name: "remote2"
@@ -43,7 +43,7 @@
   gui_mode: false
   ram: "512"
   vcpu: "1"
-  private_ip_addr: "10.100.60.12"
+  private_net_ip_addr: "10.100.60.12"
 
 # https://app.vagrantup.com/gusztavvargadr/boxes/windows-server/versions/1809.0.1907-standard
 # NOTE: only available for VirtualBox and HyperV
@@ -54,7 +54,7 @@
   gui_mode: false
   ram: "2048"
   vcpu: "1"
-  private_ip_addr: "10.100.60.13"
+  private_net_ip_addr: "10.100.60.13"
 
 # https://app.vagrantup.com/gusztavvargadr/boxes/windows-server/versions/1809.0.1907-standard
 # NOTE: only available for VirtualBox and HyperV
@@ -65,7 +65,7 @@
   gui_mode: false
   ram: "2048"
   vcpu: "1"
-  private_ip_addr: "10.100.60.14"
+  private_net_ip_addr: "10.100.60.14"
 
 # https://app.vagrantup.com/gusztavvargadr/boxes/windows-server/versions/1809.0.1907-standard-core
 # NOTE: only available for VirtualBox and HyperV
@@ -76,7 +76,7 @@
   gui_mode: false
   ram: "2048"
   vcpu: "1"
-  private_ip_addr: "10.100.60.15"
+  private_net_ip_addr: "10.100.60.15"
 
   # https://app.vagrantup.com/gusztavvargadr/boxes/windows-server/versions/1809.0.1907-standard
 - name: "remote6"
@@ -86,4 +86,4 @@
   gui_mode: false
   ram: "2048"
   vcpu: "1"
-  private_ip_addr: "10.100.60.16"
+  private_net_ip_addr: "10.100.60.16"

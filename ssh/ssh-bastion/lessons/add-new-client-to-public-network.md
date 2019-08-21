@@ -1,16 +1,16 @@
-# Add New Client to Public Network
+# Add New Client to Local Network
 ## Overview
 
 The goals of this lesson are:
 
-* Add a Fedora Linux client to existing public network (192.168.60.*)
+* Add a Fedora Linux client to existing local network (192.168.60.*)
 * Configure this client, the bastion, and the servers in the private network to allow SSH communication
 * Validate SSH connection between this client, the bastion host, and the private servers
 
 ## Lesson
 ### Add Fedora Linux client
 
-Our goal is to add the `ryancraig/fedora-iac-dev-ws` vagrant box to our public network. This vagrant box (currently only built for the VirtualBox provider) is built using the project `https://github.com/ryancraig/packer-fedora`. It's published to the [HashiCorp Vagrant Cloud](https://app.vagrantup.com/ryancraig/boxes/fedora-iac-dev-ws). This box is currently a Fedora 30 Linux workstation with Git, VSCode, Remmina, Google Chrome, Firefox, and Docker CE installed and configured. In later lessons we will finish configuring this client for use as a Infrastructure as Code development workstation.
+Our goal is to add the `ryancraig/fedora-iac-dev-ws` vagrant box to our local network. This vagrant box (currently only built for the VirtualBox provider) is built using the project `https://github.com/ryancraig/packer-fedora`. It's published to the [HashiCorp Vagrant Cloud](https://app.vagrantup.com/ryancraig/boxes/fedora-iac-dev-ws). This box is currently a Fedora 30 Linux workstation with Git, VSCode, Remmina, Google Chrome, Firefox, and Docker CE installed and configured. In later lessons we will finish configuring this client for use as a Infrastructure as Code development workstation.
 
 #### Steps
 
@@ -28,7 +28,7 @@ Our goal is to add the `ryancraig/fedora-iac-dev-ws` vagrant box to our public n
   #box_url: 
   ram: "2048"
   vcpu: "2"
-  mock_public_ip_addr: "192.168.60.31"
+  local_net_ip_addr: "192.168.60.31"
 ```
 
 1. Start `dev-client`. In a terminal/cmd session, navigate to `learning-tools/ssh/ssh-bastion` and execute `vagrant up dev-client`.
