@@ -149,11 +149,80 @@ In `dev-client`:
 1. Execute `Get-ADUser -Identity vagrant -Properties *` to view all properties of `vagrant` user
 
 *NOTE: Here's a handy link to all PowerShell ActiveDirectory commands https://docs.microsoft.com/en-us/powershell/module/addsadministration/?view=win10-ps.*
+
 ### Configure two Windows 2019 Servers on a private network (NOT domain-joined) to allow WinRM over HTTP
 
-We will configure `remote3` and `remote6` to allow WinRM over HTTP and validate the configuration.
+We will configure `remote3` and `remote6` to allow WinRM over HTTP between two Windows servers that are not joined to a domain. We will then validate the configuration.
 
+#### Steps
+On `dev-client`:
 
+1. RDP to `remote3`
+1. RDP to `remote6`
+1. Launch PowerShell terminal on both machines
+1. Execute `winrm enumerate winrm/config/Listener` to ensure WinRM over HTTP is configured on both machines
+1. Ensure `WinRM-HTTP` inbound firewall rule exists and allows inbound requests over port `5985`
+1. In `remote3` RDP session, in PowerShell terminal, execute `winrs -r:http://10.100.60.16:5985/wsman -u:vagrant -p:vagrant ipconfig` to attempt to connect to `remote6`
+*NOTE: This WinRM connection should fail because the two servers on not domain joined. By default, servers not joined to a domain can only establish WinRM connections over HTTPS. You can overcome this issue by configuring TrustedHosts. 
+1. In both RDP sessions, in Powershell, execute `Get-Item WSMan:\localhost\Client\TrustedHosts` to view the list of TrustedHosts. There should be no entries.
+1. In both RDP sessions, execute `Set-Item WSMan:\localhost\Client\TrustedHosts -Value *` to allow all computers to connect
+1. In `remote3` RDP session, in PowerShell terminal, execute `winrs -r:http://10.100.60.16:5985/wsman -u:vagrant -p:vagrant ipconfig` to attempt to connect to `remote6`. `ipconfig` should be executed on `remote6` via WinRM.
+1. In `remote6` RDP session, in PowerShell terminal, execute `winrs -r:http://10.100.60.13:5985/wsman -u:vagrant -p:vagrant ipconfig` to attempt to connect to `remote3`.`ipconfig` should be executed on `remote3` via WinRM.
+1. In `remote5` RDP session, in PowerShell terminal, execute `winrs -r:http://10.100.60.13:5985/wsman -u:vagrant -p:vagrant ipconfig` to attempt to connect to `remote3`. The WinRM connection should fail.
+1. In `remote5` RDP session, execute `Set-Item WSMan:\localhost\Client\TrustedHosts -Value 10.100.60.13` to allow `remote5` to connect to `remote3`
+e3`.
+1. In `remote5` RDP session, in PowerShell terminal, execute `winrs -r:http://10.100.60.13:5985/wsman -u:vagrant -p:vagrant ipconfig` to attempt to connect to `remote3`. `ipconfig` should be executed on `remote3` via WinRM.
+1. In `remote5` RDP session, in PowerShell terminal, execute `winrs -r:http://10.100.60.16:5985/wsman -u:vagrant -p:vagrant ipconfig` to attempt to connect to `remote6`. The WinRM connection should fail.
+1. In all RDP sessions, execute `Clear-Item WSMan:\localhost\Client\TrustedHosts` to clear all entries from TrustedHosts list
+1. Verify that all WinRM connection attempts fail.
+
+### Configure two Windows 2019 Servers on a private network (NOT domain-joined) to allow WinRM over HTTPS
+
+We will configure `remote3` and `remote6` to allow WinRM over HTTPS between two Windows servers that are not joined to a domain. We will then validate the configuration.
+
+#### Steps
+
+On `dev-client`:
+
+1. In `remote3` and `remote6` RDP sessions, in PowerShell terminal, execute:
+```
+$url = "https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1"
+$file = "$env:temp\ConfigureRemotingForAnsible.ps1"
+(New-Object -TypeName System.Net.WebClient).DownloadFile($url, $file)
+powershell.exe -ExecutionPolicy ByPass -File $file
+```
+*NOTE: The `ConfigureRemotingForAnsible.ps1` script configures WinRM over HTTP and HTTPS, generates an X509 certificate that will be used to establish an encrypted WinRM session. Firewall rules are also modified so that WinRM over HTTP and HTTPS can be successfully established.*
+
+2. Test WinRM over HTTP. In `remote3` RDP session, in PowerShell terminal, execute `winrs -r:http://10.100.60.16:5985/wsman -u:vagrant -p:vagrant ipconfig` to attempt to connect to `remote6`. The WinRM connection should fail.
+
+3. Test out HTTPS. 2. Test WinRM over HTTP. In `remote3` RDP session, in PowerShell terminal, execute `winrs -r:http://10.100.60.16:5985/wsman -u:vagrant -p:vagrant -ssl ipconfig` to attempt to connect to `remote6`. The WinRM connection should fail because the certificate is not verifiable.
+
+4. Test out HTTPS, ignoring certificate verification. The WinRM connection should succeed. In `remote3` RDP session, in PowerShell terminal, execute:
+```
+$username = "vagrant"
+$password = ConvertTo-SecureString -String "vagrant" -AsPlainText -Force
+$cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $password
+
+$session_option = New-PSSessionOption -SkipCACheck -SkipCNCheck -SkipRevocationCheck
+Invoke-Command -ComputerName 10.100.60.16 -UseSSL -ScriptBlock { ipconfig } -Credential $cred -SessionOption $session_option
+```
+5. Test out HTTPS, ignoring certificate verification. The WinRM connection should succeed. In `remote6` RDP session, in PowerShell terminal, execute:
+```
+$username = "vagrant"
+$password = ConvertTo-SecureString -String "vagrant" -AsPlainText -Force
+$cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $password
+
+$session_option = New-PSSessionOption -SkipCACheck -SkipCNCheck -SkipRevocationCheck
+Invoke-Command -ComputerName 10.100.60.13 -UseSSL -ScriptBlock { ipconfig } -Credential $cred -SessionOption $session_option
+```
+
+### Domain join two Windows 2019 Servers and configure to allow WinRM over HTTP
+
+We will domain join `remote3` and `remote6` to the `example.net` Active Directory domain.
+
+#### Steps
+
+*TODO*
 
 
 ## External References
@@ -167,6 +236,11 @@ We will configure `remote3` and `remote6` to allow WinRM over HTTP and validate 
 ### PowerShell
 * [PowerShell Module Browser](https://docs.microsoft.com/en-us/powershell/module/?view=win10-ps)
 * [PowerShell Active Directory Module](https://docs.microsoft.com/en-us/powershell/module/addsadministration/?view=win10-ps)
+* [Add computers to TrustedHosts list using PowerShell](https://www.dtonias.com/add-computers-trustedhosts-list-powershell/)
+* [Remove computers from TrustedHosts List using PowerShell](https://social.technet.microsoft.com/Forums/scriptcenter/en-US/254407bb-7651-4b28-a655-b58221208ecb/powershell-remove-wsman-trustedhosts-value?forum=ITCG)
+
+### WinRM
+* [WinRM: Setting up a Windows Host for Ansible](https://docs.ansible.com/ansible/latest/user_guide/windows_setup.html)
 
 ### WinRM troubleshooting
 * [StackOverflow.com: Cannot create remote powershell session after Enable-PSRemoting](https://stackoverflow.com/questions/16062033/cannot-create-remote-powershell-session-after-enable-psremoting?rq=1)
