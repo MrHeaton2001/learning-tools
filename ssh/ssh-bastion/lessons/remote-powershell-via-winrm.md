@@ -216,14 +216,111 @@ $session_option = New-PSSessionOption -SkipCACheck -SkipCNCheck -SkipRevocationC
 Invoke-Command -ComputerName 10.100.60.13 -UseSSL -ScriptBlock { ipconfig } -Credential $cred -SessionOption $session_option
 ```
 
-### Domain join two Windows 2019 Servers and configure to allow WinRM over HTTP
+### Configure two Windows 2019 Servers on a private network that are domain-joined to allow WinRM over HTTP
 
-We will domain join `remote3` and `remote6` to the `example.net` Active Directory domain.
+Here's how to do this...don't do it. It has never and will never be a good idea to establish a WinRM connection over HTTP as information is transmitted in the clear. Now learn how to domain join two Windows 2019 Servers and configure to allow WinRM over HTTPS.
+
+### Domain join two Windows 2019 Servers and configure to allow WinRM over HTTPS
+
+We will domain join `remote3` and `remote6` to the `example.net` Active Directory domain and then configure WinRM to use an AD managed administrator account.
 
 #### Steps
 
-*TODO*
+On `dev-client`:
 
+1. In `remote3` RDP session, in Powershell terminal, execute `Get-NetIPConfiguration` to find the `InterfaceIndex` associated with the `10.100.60.13` IP address.
+
+The output will look similar to the following:
+```
+InterfaceAlias       : Ethernet 2
+InterfaceIndex       : 5
+InterfaceDescription : Intel(R) PRO/1000 MT Desktop Adapter #2
+NetProfile.Name      : example.net
+IPv4Address          : 10.100.60.16
+IPv6DefaultGateway   :
+IPv4DefaultGateway   :
+DNSServer            : 10.100.60.15
+
+InterfaceAlias       : Ethernet
+InterfaceIndex       : 7
+InterfaceDescription : Intel(R) PRO/1000 MT Desktop Adapter
+NetProfile.Name      : Network
+IPv4Address          : 10.0.2.15
+IPv6DefaultGateway   :
+IPv4DefaultGateway   : 10.0.2.2
+DNSServer            : 10.0.2.3
+```
+In this example, the `InterfaceIndex` we are looking for is `5`.
+
+2. In `remote3` RDP session, in Powershell terminal, execute `Set-DnsClientServerAddress -InterfaceIndex 5 -ServerAddresses 10.100.60.15` to set the DNS server `remote3` should use to resolve DNS names.
+
+*NOTE: If `InterfaceIndex` value is not `5` you'll want to change it in the `Set-DnsClientServerAddress` command above.*
+
+3. In `remote3` RDP session, in Powershell terminal, execute `Add-Computer -DomainName example.net -Credential vagrant@example.net` to join `remote3` to the `example.net` Active Directory domain.
+
+4. In `remote3` RDP session, in Powershell terminal, execute `Restart-Computer -Force`.
+
+5. Repeat steps 1 through 4 for `remote6`.
+
+6. In `remote3` RDP session, in Powershell terminal, execute:
+```
+$username = "vagrant@example.net"
+$password = ConvertTo-SecureString -String "vagrant" -AsPlainText -Force
+$cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $password
+
+$session_option = New-PSSessionOption -SkipCACheck -SkipCNCheck -SkipRevocationCheck
+Invoke-Command -ComputerName remote6.example.net -UseSSL -ScriptBlock { ipconfig } -Credential $cred -SessionOption $session_option
+```
+This script will attempt to connect to `remote6` using the AD-managed user `vagrant@example.net`. This is an administrator user but it is not yet a local administrator on `remote6`. Expect this WinRM attempt to fail with an error similar to:
+
+```
+[remote6.example.net] Connecting to remote server remote6.example.net failed with the following error message : Access
+is denied. For more information, see the about_Remote_Troubleshooting Help topic.
+    + CategoryInfo          : OpenError: (remote6.example.net:String) [], PSRemotingTransportException
+    + FullyQualifiedErrorId : AccessDenied,PSSessionStateBroken
+```
+
+The problem is that `vagrant@example.net` is not a local admin. We need to add `vagrant@example.net` to `remote6` as a local administrator with `Full Control`.
+
+7. In `remote3` RDP session, in Powershell terminal, execute `Set-PSSessionConfiguration -ShowSecurityDescriptorUI -Name Microsoft.PowerShell -Force`.
+
+8. In the `Permissions for ...` window, click `Add` and add `vagrant@example.net`. Click `Check Names`. Click `OK`. Tick the `Full Control`. Click `OK`.
+
+9. In `remote3` RDP session, in Powershell terminal, execute:
+```
+$username = "vagrant@example.net"
+$password = ConvertTo-SecureString -String "vagrant" -AsPlainText -Force
+$cred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $username, $password
+
+$session_option = New-PSSessionOption -SkipCACheck -SkipCNCheck -SkipRevocationCheck
+Invoke-Command -ComputerName remote6.example.net -UseSSL -ScriptBlock { ipconfig } -Credential $cred -SessionOption $session_option
+```
+
+Expect this WinRM connection attempt to succeed. You should see output similar to:
+```
+Windows IP Configuration
+
+
+Ethernet adapter Ethernet:
+
+   Connection-specific DNS Suffix  . : melaleuca.net
+   Link-local IPv6 Address . . . . . : fe80::c1b8:2812:3945:d660%7
+   IPv4 Address. . . . . . . . . . . : 10.0.2.15
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 10.0.2.2
+
+Ethernet adapter Ethernet 2:
+
+   Connection-specific DNS Suffix  . :
+   Link-local IPv6 Address . . . . . : fe80::bdbe:cb8f:626:8368%5
+   IPv4 Address. . . . . . . . . . . : 10.100.60.16
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . :
+```
+
+10. Repeat steps 6 through 9 for `remote6`.
+
+*NOTE: We will not cover how to 
 
 ## External References
 
