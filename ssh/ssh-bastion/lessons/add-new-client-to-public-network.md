@@ -75,24 +75,24 @@ Host bastion
 Host remote1
   Hostname 10.100.60.11
   IdentityFile ~/.ssh/vagrant_insecure_rsa
-  ProxyCommand ssh bastion -W %h:%p -F ssh.conf
+  ProxyCommand ssh bastion -W %h:%p -F ~/.ssh/ssh.conf
 
 Host remote2
   Hostname 10.100.60.12
   IdentityFile ~/.ssh/vagrant_insecure_rsa
-  ProxyCommand ssh bastion -W %h:%p -F ssh.conf
+  ProxyCommand ssh bastion -W %h:%p -F ~/.ssh/ssh.conf
 
 # Windows 2019 server with OpenSSH configured
 Host remote3
   Hostname 10.100.60.13
   IdentityFile ~/.ssh/vagrant_insecure_rsa
-  ProxyCommand ssh bastion -W %h:%p -F ssh.conf
+  ProxyCommand ssh bastion -W %h:%p -F ~/.ssh/ssh.conf
 ```
 1. On the `dev-client` box, change security on the `ssh.conf` file. In terminal, execute `chmod 400 ~/.ssh/ssh.conf`.
 
 1. Verify you can establish an SSH session from `dev-client` to `bastion` using the `ssh.conf`. On your workstation, `vagrant up bastion` (If the bastion host is not already running; if it's running skip executing this command). On the `dev-test` box, in terminal, execute `ssh -F ~/.ssh/ssh.conf bastion`. *NOTE: An SSH session should be established successfully. Although the ssh.conf file or using the default ~/.ssh/conf file is unnecessary to successfully establish an SSH session with a remote server if does make it easier especially when jumping through a bastion host to a private remote server.*
 
-1. Verify you can establish an SSH session from `dev-client` to `remote` using the `ssh.conf`. On your workstation, `vagrant up remote1` (If the bastion host is not already running; if it's running skip executing this command). On the `dev-test` box, in terminal, execute `ssh -F ~/.ssh/ssh.conf bastion`.
+1. Verify you can establish an SSH session from `dev-client` to `remote1` using the `ssh.conf`. On your workstation, `vagrant up remote1` (If `remote1` is not already running; if it's running skip executing this command). On the `dev-test` box, in terminal, execute `ssh -F ~/.ssh/ssh.conf remote1`.
 
 1. For extra credit, replace the use of the non-standard `ssh.conf` file with the standard `.ssh/config` file. You will have to create the `config` file. Add the following contents:
 ```
@@ -118,4 +118,4 @@ Host remote3
   ProxyCommand ssh bastion -W %h:%p
   ```
   
-  *NOTE: Review the differences between the contents of `ssh.conf` and `conf`. Also note that `ssh.conf` can live anywhere on the local file system whereas `conf` is expected to be in the `~/.ssh/` path.*
+  *NOTE: Review the differences between the contents of `ssh.conf` and `config`. Also note that `ssh.conf` can live anywhere on the local file system whereas `config` is expected to be in the `~/.ssh/` path.*
