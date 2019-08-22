@@ -19,7 +19,7 @@ Our goal is to add the `ryancraig/fedora-iac-dev-ws` vagrant box to our local ne
 
 1. Locate `machines.yml` file in the `learning-tools/ssh/ssh-bastion` path
 
-1. Append the following content to the `machines.yml` file and save changes
+1. Verify the following machine entry exists in the `machines.yml` file. If it doesn't exist, add it.
 
 ```
 - name: "dev-client"
