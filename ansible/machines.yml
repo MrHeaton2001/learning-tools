@@ -1,0 +1,36 @@
+---
+- name: "ansible-dev-ws"
+  role: "client-node"
+  vb_box: "ryancraig/fedora-iac-dev-ws"
+  #box_url: 
+  gui_mode: true
+  ram: "2048"
+  vcpu: "2"
+  local_net_ip_addr: "192.168.60.31"
+
+# https://app.vagrantup.com/centos/boxes/7    
+- name: "centos7-host1"
+  role: "remote-node"
+  vb_box: "centos/7"
+  gui_mode: false
+  ram: "512"
+  vcpu: "1"
+  local_net_ip_addr: "192.168.60.98"
+
+# https://app.vagrantup.com/centos/boxes/7    
+- name: "centos7-host2"
+  role: "remote-node"
+  vb_box: "centos/7"
+  gui_mode: false
+  ram: "512"
+  vcpu: "1"
+  local_net_ip_addr: "192.168.60.99"
+
+  # https://app.vagrantup.com/centos/boxes/7    
+- name: "centos7-host3"
+  role: "remote-node"
+  vb_box: "centos/7"
+  gui_mode: false
+  ram: "512"
+  vcpu: "1"
+  local_net_ip_addr: "192.168.60.97"
