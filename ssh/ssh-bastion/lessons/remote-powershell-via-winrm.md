@@ -131,7 +131,7 @@ In `dev-client`:
 
 We will provision `remote5`, the Windows 2019 Server Core machine, as a DC. This requires installation and configuration of Active Directory and DNS. When this process is complete we will have an Active Directory server for `example.net` and a DNS server configured with an external DNS forwarder.
 
-*NOTE: Because we are using a Windows 2019 Server Core vagrant box with OpenSSH, you can use `scp -i "path/to/vagrant/insecure/private/rsa/key" -P {{ LOCAL_PORT }} "path/to/local/file" "vagrant@localhost:/some/remote/path"`.
+*NOTE: Because we are using a Windows 2019 Server Core vagrant box with OpenSSH, you can use `sftp -i vagrant_insecure_rsa  -P {{ LOCAL_PORT }} vagrant@localhost` to start an SFTP session on the Windows 2019 vagrant box. Once the SFTP session exists, execute `cd /to/remote/path/where/you/want/to/put/file` and then execute `put /local/path/to/file` to copy a local file to the Windows vagrant box.
 
 In `dev-client`:
 
