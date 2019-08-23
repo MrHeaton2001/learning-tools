@@ -131,22 +131,24 @@ In `dev-client`:
 
 We will provision `remote5`, the Windows 2019 Server Core machine, as a DC. This requires installation and configuration of Active Directory and DNS. When this process is complete we will have an Active Directory server for `example.net` and a DNS server configured with an external DNS forwarder.
 
+*NOTE: Because we are using a Windows 2019 Server Core vagrant box with OpenSSH, you can use `scp -i "path/to/vagrant/insecure/private/rsa/key" -P {{ LOCAL_PORT }} "path/to/local/file" "vagrant@localhost:/some/remote/path"`.
+
 In `dev-client`:
 
 1. Launch Remmina
 1. Start `remote5` RDP session
 1. In your local `learning-tools` git repo, locate `create-domain.ps1` PowerShell script in `/ssh/ssh-bastion/scripts` path
-1. In PS terminal, execute script
-1. In PS terminal, execute `Restart-Computer -Force`
+1. In `remote5` RDP session, in PS terminal, execute the `create-domain.ps1` script
+1. In `remote5` RDP session, in PS terminal, execute `Restart-Computer -Force`
 1. Edit the `remote5` RDP profile. Add `example.net` in `Domain` and then `Save and Connect`
 1. In your local `learning-tools` git repo, locate `add-external-dns-forwarder.ps1` PowerShell script in `learning-tools/ssh/ssh-bastion/scripts` path
-1. In PS terminal, execute script
-1. In PS terminal, execute `Get-Service adws,kdc,netlogon,dns` to verify successful installation and runtime status of AD-related services
-1. Execute `Get-ADDomainController` to view AD configuration details
-1. Execute `Get-ADDomain example.net` to view the details about `example.net` AD domain
-1. Execute `Get-ADForest example.net` to view the details about the AD forest
-1. Execute `Get-smbshare SYSVOL` to ensure the DC `SYSVOL` share is configured
-1. Execute `Get-ADUser -Identity vagrant -Properties *` to view all properties of `vagrant` user
+1. In `remote5` RDP session, in PS terminal, execute the `add-external-dns-forwarder.ps1` script
+1. In `remote5` RDP session, in PS terminal, execute `Get-Service adws,kdc,netlogon,dns` to verify successful installation and runtime status of AD-related services
+1. In `remote5` RDP session, in PS terminal, execute `Get-ADDomainController` to view AD configuration details
+1. In `remote5` RDP session, in PS terminal, execute `Get-ADDomain example.net` to view the details about `example.net` AD domain
+1. In `remote5` RDP session, in PS terminal, execute `Get-ADForest example.net` to view the details about the AD forest
+1. In `remote5` RDP session, in PS terminal, execute `Get-smbshare SYSVOL` to ensure the DC `SYSVOL` share is configured
+1. In `remote5` RDP session, in PS terminal, execute `Get-ADUser -Identity vagrant -Properties *` to view all properties of `vagrant` user
 
 *NOTE: Here's a handy link to all PowerShell ActiveDirectory commands https://docs.microsoft.com/en-us/powershell/module/addsadministration/?view=win10-ps.*
 
@@ -159,9 +161,9 @@ On `dev-client`:
 
 1. RDP to `remote3`
 1. RDP to `remote6`
-1. Launch PowerShell terminal on both machines
-1. Execute `winrm enumerate winrm/config/Listener` to ensure WinRM over HTTP is configured on both machines
-1. Ensure `WinRM-HTTP` inbound firewall rule exists and allows inbound requests over port `5985`
+1. In `remote5` and `remote6` RDP sessions, Launch PowerShell terminal
+1. In `remote5` and `remote6` RDP sessions, in PS terminal, execute `winrm enumerate winrm/config/Listener` to ensure WinRM over HTTP is configured
+1. On both remote machines, ensure `WinRM-HTTP` inbound firewall rule exists and allows inbound requests over port `5985`
 1. In `remote3` RDP session, in PowerShell terminal, execute `winrs -r:http://10.100.60.16:5985/wsman -u:vagrant -p:vagrant ipconfig` to attempt to connect to `remote6`
 *NOTE: This WinRM connection should fail because the two servers on not domain joined. By default, servers not joined to a domain can only establish WinRM connections over HTTPS. You can overcome this issue by configuring TrustedHosts. 
 1. In both RDP sessions, in Powershell, execute `Get-Item WSMan:\localhost\Client\TrustedHosts` to view the list of TrustedHosts. There should be no entries.

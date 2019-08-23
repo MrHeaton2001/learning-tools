@@ -67,6 +67,9 @@ The script accepts five parameters:
 The script is named `rdp-tunnel.sh`. It is located in `ssh/ssh-bastion`.
 
 #### Steps
+
+*NOTE: If you SCP from Windows to Linux you may need to use `dos2unix` on the `rdp-tunnel.sh` file to convert line breaks from CR+LF to LF.*
+
 1. Copy `rdp-tunnel.sh` to `dev-client`. Put this file in `/home/vagrant`.
 
 1. On `dev-client`, change security on `rdp-tunnel.sh`. In `terminal`, execute `chmod +x /home/vagrant/rdp-tunnel.sh`.
