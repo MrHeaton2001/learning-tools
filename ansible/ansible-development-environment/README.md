@@ -38,9 +38,9 @@ all:
     centos-host2:
       ansible_host: 192.168.60.99
 ```
-3. `ansible -i hosts.yaml --private-key=/home/vagrant/.ssh/insecure_vagrant_rsa -m ping all`
-4. `ansible -i hosts.yaml --private-key=/home/vagrant/.ssh/insecure_vagrant_rsa -m ping centos-host1`
-5. `ansible -i hosts.yaml --private-key=/home/vagrant/.ssh/insecure_vagrant_rsa -m ping centos-host2`
+3. `ansible -i ~/hosts.yaml --private-key=/home/vagrant/.ssh/vagrant_insecure_rsa -m ping all`
+4. `ansible -i ~/hosts.yaml --private-key=/home/vagrant/.ssh/vagrant_insecure_rsa -m ping centos-host1`
+5. `ansible -i ~/hosts.yaml --private-key=/home/vagrant/.ssh/vagrant_insecure_rsa -m ping centos-host2`
 
 ### Deactivate Python Virtual Environment
 In `ansible-dev-ws` VirtualBox VM window, in `terminal`:
