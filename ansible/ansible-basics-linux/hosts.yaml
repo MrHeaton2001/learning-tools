@@ -1,0 +1,6 @@
+all:
+  hosts:
+    database:
+      ansible_host: 192.168.60.98
+    centos-host2:
+      ansible_host: 192.168.60.99
