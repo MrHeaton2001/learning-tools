@@ -34,9 +34,9 @@ In `ansible-dev-ws` VirtualBox VM window, in `terminal`:
 all:
   hosts:
     centos-host1:
-      ansible_host: 192.168.60.98
+      ansible_host: 192.168.60.91
     centos-host2:
-      ansible_host: 192.168.60.99
+      ansible_host: 192.168.60.92
 ```
 3. `ansible -i ~/hosts.yaml --private-key=/home/vagrant/.ssh/vagrant_insecure_rsa -m ping all`
 4. `ansible -i ~/hosts.yaml --private-key=/home/vagrant/.ssh/vagrant_insecure_rsa -m ping centos-host1`
@@ -59,6 +59,12 @@ In `ansible-dev-ws` VirtualBox VM window:
 1. Launch `VSCode`
 1. In `VSCode`, go to `File` > `Preferences` > `Extensions`, find and install `VS Code extension for Ansible`
 
+### Shutdown Vagrant VDC
+When you are finished with this lesson and you are ready to release the resources the Vagrant VDC are utilizing:
+
+1. On your Vagrant host, `cd` to `/ansible/ansible-development-environment` path within your local `learning-tools` git repo
+1. Finally, on your Vagrant host, in a terminal, execute `vagrant halt`
+
 ## External References
 ### Ansible
 
@@ -77,5 +83,3 @@ In `ansible-dev-ws` VirtualBox VM window:
 * [Python3: `venv` - Creation of virtual environments](https://docs.python.org/3/library/venv.html)
 
 * [TowardsDataScience.com: All you need to know about Python virtual environments](https://towardsdatascience.com/all-you-need-to-know-about-python-virtual-environments-9b4aae690f97)
-
-### 

@@ -15,7 +15,7 @@
   gui_mode: false
   ram: "512"
   vcpu: "1"
-  local_net_ip_addr: "192.168.60.98"
+  local_net_ip_addr: "192.168.60.91"
 
 # https://app.vagrantup.com/centos/boxes/7    
 - name: "centos7-host2"
@@ -24,13 +24,31 @@
   gui_mode: false
   ram: "512"
   vcpu: "1"
-  local_net_ip_addr: "192.168.60.99"
+  local_net_ip_addr: "192.168.60.92"
 
-  # https://app.vagrantup.com/centos/boxes/7    
+# https://app.vagrantup.com/centos/boxes/7    
 - name: "centos7-host3"
   role: "remote-node"
   vb_box: "centos/7"
   gui_mode: false
   ram: "512"
   vcpu: "1"
-  local_net_ip_addr: "192.168.60.97"
+  local_net_ip_addr: "192.168.60.93"
+
+# https://app.vagrantup.com/centos/boxes/7    
+- name: "centos7-host4"
+  role: "remote-node"
+  vb_box: "centos/7"
+  gui_mode: false
+  ram: "512"
+  vcpu: "1"
+  local_net_ip_addr: "192.168.60.94"
+
+# https://app.vagrantup.com/centos/boxes/7    
+- name: "centos7-host5"
+  role: "remote-node"
+  vb_box: "centos/7"
+  gui_mode: false
+  ram: "512"
+  vcpu: "1"
+  local_net_ip_addr: "192.168.60.95"
