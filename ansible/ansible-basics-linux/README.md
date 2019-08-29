@@ -14,7 +14,16 @@ The goals of this lab are:
 We will use 4 vagrant boxes for this lesson. `ansible-dev-ws` is the Fedora30 workstation provisioned as an Ansible development workstation and Ansible controller. `centos7-host[1..3]` are three basic CentOS 7 headless servers.
 
 1. On your Vagrant host workstation, execute `vagrant up`
+
 1. Once all vagrant boxes are running, execute `vagrant status` to verify the status of each vagrant box. All four boxes should be running.
+
+## Fetch `ansible-examples` git repo
+The `ansible-examples` git repo contains example Ansible assets such as hosts inventory files, playbooks, RSA key pairs, and configuration files used to showcase specific Ansible features and implementation options and best practices.
+
+1. On `ansible-dev-ws`, launch `terminal`, execute `cd ~`
+
+1. On `ansible-dev-ws`, fetch the [ansible-examples git repo](https://github.com/ryancraig/ansible-examples). In `terminal` execute `git clone https://github.com/ryancraig/ansible-examples.git` or `git pull https://github.com/ryancraig/ansible-examples.git` if you already have a local repo.
+
 
 ## Ansible Configuration
 We will deploy a valid `ansible.cfg` file to the user home, current directory, and then create `ANSIBLE_CONFIG` environment variable to see Ansible's configuration search behavior in action.
@@ -23,37 +32,57 @@ We will deploy a valid `ansible.cfg` file to the user home, current directory, a
 
 ### Steps
 #### Deploy `.ansible.cfg` in user home
-1. On your host workstation, locate `ansible.cfg` in `/ansible/ansible-basics-linux` within your local `learning-tools` git repo
-1. Copy `ansible.cfg` to the `ansible-dev-ws`. Copy the file as `~/.ansible.cfg` or `/home/vagrant/.ansible.cfg`. *NOTE: if you SCP the file from a Windows host to the Linux vagrant box you'll need to `dos2unix .ansible.cfg`*
+1. On `ansible-dev-ws`, launch `VS Code`, and open folder `~/ansible-examples`
+
+1. On `ansible-dev-ws`, locate and copy `~/ansible-examples/ansible.cfg` file as `~/.ansible.cfg` or `/home/vagrant/.ansible.cfg`.
+
 1. On `ansible-dev-ws`, launch `terminal`
+
 1. On `ansible-dev-ws`, in `terminal`, if you do not have the `ansible-2.8.4` virtual environment activated, execute `source ~/py3venvironments/ansible-2.8.4/.env/bin/activate`. Otherwise skip this step.
-1. On `ansible-dev-ws`, in `terminal`, execute `ansible --version`
+
+1. On `ansible-dev-ws`, in `terminal`, execute `cd ~`, and then execute `ansible --version`
+
 1. Read the output and see that Ansible searched and found the `.ansible.cfg` file in the user home. You should see `config file = /home/vagrant/.ansible.cfg`
 
 #### Deploy `ansible.cfg` to current directory
-1. On your host workstation, locate `ansible.cfg` in `/ansible/ansible-basics-linux` within your local `learning-tools` git repo
-1. Copy `ansible.cfg` to the `ansible-dev-ws`. Copy the file as `~/ansible-basics-linux/ansible.cfg` or `/home/vagrant/ansible-basics-linux/ansible.cfg`. *NOTE: if you SCP the file from a Windows host to the Linux vagrant box you'll need to `dos2unix ansible.cfg`*
-1. On `ansible-dev-ws`, launch `terminal`
-1. `cd ~/ansible-basics-linux`
+1. On `ansible-dev-ws`, launch `terminal`, execute `cd ~/ansible-examples` and locate `ansible.cfg` file
+
 1. On `ansible-dev-ws`, in `terminal`, execute `ansible --version`
-1. Read the output and see that Ansible searched and found the `ansible.cfg` file in the current directory. You should see `config file = /home/vagrant/ansible-basics-linux/ansible.cfg`
+
+1. Read the output and see that Ansible searched and found the `ansible.cfg` file in the current directory. You should see `config file = /home/vagrant/ansible-examples/ansible.cfg`
+
 1. On `ansible-dev-ws`, in `terminal`, execute `cd ..`
+
 1. On `ansible-dev-ws`, in `terminal`, execute `ansible --version`
+
 1. Read the output and see that Ansible searched and found the `.ansible.cfg` file in the user home. You should see `config file = /home/vagrant/.ansible.cfg`
 
 #### Set `ANSIBLE_CONFIG` environment variable
-1. On your host workstation, locate `ansible.cfg` in `/ansible/ansible-basics-linux` within your local `learning-tools` git repo
-1. Copy `ansible.cfg` to the `ansible-dev-ws`. Copy the file as `~/ansible-basics-linux/ANSIBLE.cfg` or `/home/vagrant/ansible-basics-linux/ANSIBLE.cfg`. *NOTE: if you SCP the file from a Windows host to the Linux vagrant box you'll need to `dos2unix ansible.cfg`*
-1. On `ansible-dev-ws`, launch `terminal`
-1. On `ansible-dev-ws`, in `terminal`, execute `export ANSIBLE_CONFIG=~/ansible-basics-linux/ANSIBLE.cfg`
+1. On `ansible-dev-ws`, launch `terminal`, execute `cd ~/ansible-examples` and locate `ansible.cfg` file
+
+1. On `ansible-dev-ws`, in `terminal`, execute `cp ansible.cfg ANSIBLE.cfg`
+
+1. On `ansible-dev-ws`, in `terminal`, execute `export ANSIBLE_CONFIG=~/ansible-examples/ANSIBLE.cfg`
+
 1. On `ansible-dev-ws`, in `terminal`, execute `ansible --version`
-1. Read the output and see that Ansible searched and found the `ANSIBLE.cfg` file. You should see `config file = /home/vagrant/ansible-basics-linux/ANSIBLE.cfg`. *NOTE: Linux is case sensitive by default*.
+
+1. Read the output and see that Ansible searched and found the `ANSIBLE.cfg` file. You should see `config file = /home/vagrant/ansible-examples/ANSIBLE.cfg`. *NOTE: Linux is case sensitive by default*.
 
 ## Inventory basics
 Within this Ansible basics training we will only cover the basics of static hosts inventory. Just know that Ansible can merge multiple static inventory files. It can consume various dynamic inventories from various sources such as Hashicorp Consul. Moreover, if a dynamic inventory plugin doesn't exist you can construct your own plugin.
 
 ### ini style inventory structure
+1. Read [Ansible User Guide: Working with Inventory](https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html)
 
+1. On `ansible-dev-ws`, in `VS Code`, open folder `~/ansible-examples` if it's not already opened
+
+1. On `ansible-dev-ws`, in `VS Code`, locate and review `~/ansible-examples/hosts`. This is an example INI format hosts inventory file.
+
+1. In the `hosts` file, identify the host groups, identify ungrouped hosts, identify variables
+
+1. Test the use of the `hosts` file using the Ansible Adhoc command `ping`. On `ansible-dev-ws`, in `terminal`, execute `cd ~/ansible-examples`, then execute `ansible -i hosts --private-key=/home/vagrant/.ssh/vagrant_insecure_rsa -m ping all` to ping all hosts specified in this hosts inventory.
+
+1. Test the use of the `hosts` file using the Ansible playbook `~/ ansible-examples/playbook-basics/linux-hosts/playbook-basics-01.yml`. This playbook simply pings hosts. On `ansible-dev-ws`, in `terminal`, execute `cd ~/ansible-examples`, then execute `ansible-playbook -i hosts --private-key=/home/vagrant/.ssh/vagrant_insecure_rsa playbook-basics/linux-hosts/playbook-basics-01.yml` to ping all hosts specified in this hosts inventory.
 
 ### YAML inventory structure
 
@@ -68,17 +97,19 @@ Adhoc commands should have limited use. A valid use of an adhoc command is to pi
 
 Examples of the most simple adhoc command is `ping`.
 
-* `ansible -i ~/hosts.yml --private-key=/home/vagrant/.ssh/vagrant_insecure_rsa -m ping all`
-* `ansible -i ~/hosts.yml --private-key=/home/vagrant/.ssh/vagrant_insecure_rsa -m ping centos-host1`
-* `ansible -i ~/hosts.yml --private-key=/home/vagrant/.ssh/vagrant_insecure_rsa -m ping centos-host2`
+* `ansible -i hosts.yml --private-key=/home/vagrant/.ssh/vagrant_insecure_rsa -m ping all`
+
+* `ansible -i hosts.yml --private-key=/home/vagrant/.ssh/vagrant_insecure_rsa -m ping centos-host1`
+
+* `ansible -i hosts.yml --private-key=/home/vagrant/.ssh/vagrant_insecure_rsa -m ping centos-host2`
 
 File transfer is another common use of adhoc commands. 
 
-* `ansible webservers -i ~/hosts.yml -m file -a "dest=/srv/foo/b.txt mode=600 owner=vagrant group=vagrant"`
+* `ansible webservers -i hosts.yml -m file -a "dest=/srv/foo/b.txt mode=600 owner=vagrant group=vagrant"`
 
 Another use is shell commands such as reboot or shutdown of hosts.
 
-* `ansible databases -i ~/hosts.yml -a "/sbin/reboot" -f 10`
+* `ansible databases -i hosts.yml -a "/sbin/reboot" -f 10`
 
 ## Introduction to Playbooks
 Playbooks are the basis for a really simple configuration management and multi-machine deployment system and one that is very well suited to deploying complex applications. Playbooks can declare configurations, but they can also orchestrate steps of any manual ordered process, even as different steps must bounce back and forth between sets of machines in particular orders. They can launch tasks synchronously or asynchronously.
@@ -125,6 +156,12 @@ By composing a playbook of multiple ‘plays’, it is possible to orchestrate m
 `cd /home/vagrant/ansible-basics-linux`
 `ansible-playbook -i inventory/hosts.yml --private-key=/home/vagrant/.ssh/vagrant_insecure_rsa playbook-basics-01.yml`
 
+## Ansible Modules
+
+Modules are discrete units of code that can be used from the command line or in a playbook task. Documentation for each module can be accessed from the command line with the ansible-doc tool `ansible-doc {{ MODULE_NAME }}`. For example, `ansible-doc ping`.
+
+For a list of all available modules, see [Ansible Modules Index](https://docs.ansible.com/ansible/latest/modules/modules_by_category.html), or run `ansible-doc -l` in `terminal`.
+
 ## Roles
 
 `cd /home/vagrant/ansible-inventory-basics`
@@ -141,13 +178,7 @@ By composing a playbook of multiple ‘plays’, it is possible to orchestrate m
 
 ### Ansible Modules
 
-Modules are discrete units of code that can be used from the command line or in a playbook task. Documentation for each module can be accessed from the command line with the ansible-doc tool `ansible-doc {{ MODULE_NAME }}`. For example, `ansible-doc ping`.
-
-For a list of all available modules, see [Ansible Modules Index](https://docs.ansible.com/ansible/latest/modules/modules_by_category.html), or run `ansible-doc -l` in `terminal`.
-
-
-
-
+* [Ansible Modules Index](https://docs.ansible.com/ansible/latest/modules/modules_by_category.html)
 
 ### Ansible Adhoc Commands
 
