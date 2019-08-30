@@ -1,7 +1,7 @@
 ---
 - name: "ansible-dev-ws"
   role: "client-node"
-  vb_box: "ryancraig/fedora-iac-dev-ws"
+  vb_box: "ryancraig/fedora30-dev-ws"
   #box_url: 
   gui_mode: true
   ram: "2048"

@@ -237,16 +237,17 @@ The output will look similar to the following:
 InterfaceAlias       : Ethernet 2
 InterfaceIndex       : 5
 InterfaceDescription : Intel(R) PRO/1000 MT Desktop Adapter #2
-NetProfile.Name      : example.net
-IPv4Address          : 10.100.60.16
+NetProfile.Name      : Unidentified network
+IPv4Address          : 10.100.60.13
 IPv6DefaultGateway   :
 IPv4DefaultGateway   :
-DNSServer            : 10.100.60.15
-
+DNSServer            : fec0:0:0:ffff::1
+                       fec0:0:0:ffff::2
+                       fec0:0:0:ffff::3
 InterfaceAlias       : Ethernet
-InterfaceIndex       : 7
+InterfaceIndex       : 3
 InterfaceDescription : Intel(R) PRO/1000 MT Desktop Adapter
-NetProfile.Name      : Network
+NetProfile.Name      : melaleuca.net
 IPv4Address          : 10.0.2.15
 IPv6DefaultGateway   :
 IPv4DefaultGateway   : 10.0.2.2
